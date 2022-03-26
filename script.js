@@ -2,6 +2,7 @@ const tiles = document.getElementById('game').children;
 const state = document.getElementById('state');
 const btnReset = document.getElementById('btn-reset');
 
+let totalTurn = 0;
 let currentPlayer = 'x';
 let board = ['', '', '', '', '', '', '', '', ''];
 
@@ -17,6 +18,13 @@ function updateBoard(tile, index) {
     tile.setAttribute('class', `tile ${currentPlayer}`);
     tile.textContent = currentPlayer.toUpperCase();
     board[index] = currentPlayer;
+    totalTurn++;
+}
+function checkDraw() {
+    if (totalTurn == 9) {
+        state.removeAttribute('class');
+        state.textContent = 'Draw';
+    }
 }
 
 [...tiles].forEach((tile, index) => {
@@ -25,6 +33,7 @@ function updateBoard(tile, index) {
 
         updateBoard(tile, index);
         updatePlayer();
+        checkDraw();
     });
 });
 btnReset.addEventListener('click', () => {
@@ -34,6 +43,7 @@ btnReset.addEventListener('click', () => {
         tile.textContent = '';
     });
 
+    totalTurn = 0;
     currentPlayer = 'x';
     updatePlayer('x');
 });
