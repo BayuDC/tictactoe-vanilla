@@ -127,9 +127,9 @@ btnPlayX.addEventListener('click', () => {
 });
 btnPlayO.addEventListener('click', () => {
     playGame();
-    currentPlayer = 'o';
+    currentPlayer = 'x';
     withComputer = true;
     isPlayerTurn = false;
-    updatePlayer('o');
+    updatePlayer('x');
     computerTurn();
 });
