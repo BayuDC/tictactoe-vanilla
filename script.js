@@ -8,6 +8,8 @@ let totalTurn = 0;
 let currentPlayer = 'x';
 let board = ['', '', '', '', '', '', '', '', ''];
 let play = false;
+let withComputer;
+let isPlayerTurn;
 
 function updatePlayer(player) {
     if (!play) return;
@@ -75,19 +77,59 @@ function playGame() {
     game.setAttribute('class', 'game play');
     btnPlay.parentElement.setAttribute('style', 'display: none');
 }
+function computerTurn() {
+    if (!play) return;
+    if (!withComputer) return;
+
+    isPlayerTurn = false;
+    while (true) {
+        const index = Math.floor(Math.random() * 9);
+        const tile = game.children[index];
+        if (isLegalMove(tile)) {
+            return setTimeout(() => {
+                updateBoard(tile, index);
+                checkWin() || checkDraw();
+                updatePlayer();
+                isPlayerTurn = true;
+            }, 250);
+        }
+    }
+}
+function isLegalMove(tile) {
+    return !(tile.classList.contains('x') || tile.classList.contains('o'));
+}
 
 [...game.children].forEach((tile, index) => {
     tile.addEventListener('click', () => {
         if (!play) return;
-        if (tile.classList.contains('x') || tile.classList.contains('o')) return;
+        if (!isPlayerTurn) return;
+        if (!isLegalMove(tile)) return;
 
         updateBoard(tile, index);
         checkWin() || checkDraw();
         updatePlayer();
+        computerTurn();
     });
 });
 btnPlay.addEventListener('click', () => {
     playGame();
     currentPlayer = 'x';
+    withComputer = false;
+    isPlayerTurn = true;
     updatePlayer('x');
+});
+btnPlayX.addEventListener('click', () => {
+    playGame();
+    currentPlayer = 'x';
+    withComputer = true;
+    isPlayerTurn = true;
+    updatePlayer('x');
+});
+btnPlayO.addEventListener('click', () => {
+    playGame();
+    currentPlayer = 'o';
+    withComputer = true;
+    isPlayerTurn = false;
+    updatePlayer('o');
+    computerTurn();
 });
