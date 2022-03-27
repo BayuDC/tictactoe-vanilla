@@ -1,11 +1,13 @@
 const game = document.getElementById('game');
 const state = document.getElementById('state');
-const btnReset = document.getElementById('btn-reset');
+const btnPlay = document.getElementById('btn-play');
+const btnPlayX = document.getElementById('btn-play-x');
+const btnPlayO = document.getElementById('btn-play-o');
 
 let totalTurn = 0;
 let currentPlayer = 'x';
 let board = ['', '', '', '', '', '', '', '', ''];
-let play = true;
+let play = false;
 
 function updatePlayer(player) {
     if (!play) return;
@@ -29,7 +31,8 @@ function checkDraw() {
     if (totalTurn == 9) {
         state.removeAttribute('class');
         state.textContent = 'Draw';
-        play = false;
+
+        gameOver();
     }
 }
 function checkWin() {
@@ -49,10 +52,28 @@ function checkWin() {
             state.setAttribute('class', currentPlayer);
             state.textContent = `Player ${currentPlayer.toUpperCase()} Win`;
 
-            play = false;
+            gameOver();
             return true;
         }
     }
+}
+function gameOver() {
+    play = false;
+    game.setAttribute('class', 'game');
+    btnPlay.parentElement.removeAttribute('style', 'display: none');
+}
+function playGame() {
+    board = ['', '', '', '', '', '', '', '', ''];
+    [...game.children].forEach(tile => {
+        tile.setAttribute('class', 'tile');
+        tile.textContent = '';
+    });
+
+    totalTurn = 0;
+    play = true;
+
+    game.setAttribute('class', 'game play');
+    btnPlay.parentElement.setAttribute('style', 'display: none');
 }
 
 [...game.children].forEach((tile, index) => {
@@ -65,15 +86,8 @@ function checkWin() {
         updatePlayer();
     });
 });
-btnReset.addEventListener('click', () => {
-    board = ['', '', '', '', '', '', '', '', ''];
-    [...game.children].forEach(tile => {
-        tile.setAttribute('class', 'tile');
-        tile.textContent = '';
-    });
-
-    play = true;
-    totalTurn = 0;
+btnPlay.addEventListener('click', () => {
+    playGame();
     currentPlayer = 'x';
     updatePlayer('x');
 });

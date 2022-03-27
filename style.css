@@ -40,7 +40,9 @@ body {
     text-align: center;
     font-size: 90px;
     line-height: 114px;
-    cursor: pointer;
+}
+.game.play .tile {
+    cursor: pointer !important;
 }
 .game .tile.x,
 .game .tile.o {
@@ -52,8 +54,8 @@ body {
 .o {
     color: #9ae66e;
 }
-.btn-reset {
-    margin-top: 10px;
+.btn-play {
+    margin: 10px 2.5px 0;
     padding: 10px 15px;
     background: #753188;
     color: #ffffff;
